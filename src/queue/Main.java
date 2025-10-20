@@ -1,4 +1,4 @@
-package stack.queue;
+package queue;
 
 public class Main {
 

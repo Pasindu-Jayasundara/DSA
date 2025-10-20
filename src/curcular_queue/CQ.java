@@ -1,16 +1,15 @@
-package stack.queue;
+package curcular_queue;
 
-public class Queue {
+public class CQ {
+    private int arr[];
+    private int front, rear, size, capacity;
 
-    private int[] arr;
-    private int front, rear, capacity, size;
-
-    public Queue(int capacity) {
+    public CQ(int capacity){
         this.capacity = capacity;
         arr = new int[capacity];
-        front = 0;
+        front = -1;
         rear = -1;
-        size =0;
+        size = 0;
     }
 
     public boolean isFull(){
@@ -23,7 +22,11 @@ public class Queue {
 
     public void enqueue(int value){
         if(!isFull()){
-            arr[++rear] = value;
+            if(front == -1){
+                front = 0;
+            }
+            rear =  (rear + 1) % capacity;
+            arr[rear] = value;
             size++;
         }else{
             System.out.println("Queue is full");
@@ -32,8 +35,14 @@ public class Queue {
 
     public int dequeue(){
         if(!isEmpty()){
-            int value = arr[front++];
+            int value = arr[front];
+            front = (front + 1) % capacity;
             size--;
+
+            if(size == 0){
+                front = -1;
+                rear = -1;
+            }
             return value;
         }else{
             System.out.println("Queue is empty");
@@ -53,16 +62,17 @@ public class Queue {
     @Override
     public String toString(){
         if(isEmpty()){
-            return "Queue is empty";
+            return "Circular Queue is empty";
         }
 
-        StringBuilder sb = new StringBuilder();
-        sb.append("Queue (front -> rear): ");
-        for(int i = front; i <= rear; i++){
-            sb.append(arr[i]);
-            if(i < rear) sb.append(" -> ");
+        StringBuilder sb = new StringBuilder("CQ: [");
+        for(int i =0; i<size;i++){
+            sb.append(arr[(front +i)%capacity]);
+            if(i<size-1){
+                sb.append(", ");
+            }
         }
-
+        sb.append("]");
         return sb.toString();
     }
 }
